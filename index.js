@@ -1,7 +1,6 @@
 // Require express and body-parser
 const express = require("express")
 const bodyParser = require("body-parser")
-const Promise = require('bluebird')
 const ffprobe = require('fluent-ffmpeg').ffprobe
 const MINIO_ENDPOINT = "localhost";
 // Initialize express and define a port
