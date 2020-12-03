@@ -3,6 +3,7 @@ const express = require("express")
 const bodyParser = require("body-parser")
 const ffprobe = require('fluent-ffmpeg').ffprobe
 const MINIO_ENDPOINT = "localhost";
+let { GraphQLClient, gql } = require('graphql-request');
 // Initialize express and define a port
 const app = express()
 const PORT = process.env.PORT || 3333;
@@ -16,8 +17,9 @@ app.post("/*", async (req, res) => {
         if (err)
             console.log(err)
         id = key.replace(".mp3", "");
-        let payload = { duration: metadata.format.duration, key, id: id.substr(key.indexOf("uploads/") + 8) }
-        console.log(payload);
+        let payload = { duration: metadata.format.duration, key, id: id.substr(key.indexOf("uploads/") + 8) };
+        let resp = await send(payload);
+        console.log(resp);
         res.status(200).end() // Responding is important
 
     });
@@ -27,3 +29,20 @@ app.post("/*", async (req, res) => {
 
 // Start express on the defined port
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
+
+let send = async (payload) => {
+    const endpoint = 'https://islamvibes.herokuapp.com'
+
+    const graphQLClient = new GraphQLClient(endpoint)
+
+    const mutation = gql`
+
+    mutation($key: String!, $duration: Float!, $id: String! ){
+        SudoUpdateLecture( key: $key, duration: $duration, id: $id )
+        
+  `
+
+    const data = await graphQLClient.request(mutation, payload);
+    return data
+
+}
