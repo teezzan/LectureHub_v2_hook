@@ -37,7 +37,7 @@ let send = async (payload) => {
 
     const mutation = gql`
 
-    mutation($key: String!, $duration: Float!, $id: String! ){
+    mutation Update($key: String!, $duration: Float!, $id: String! ){
         SudoUpdateLecture( key: $key, duration: $duration, id: $id )
         
   `
