@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3333;
 app.use(bodyParser.json())
 app.post("/*", async (req, res) => {
     let key = req.body.Key;
-    let aud_url = `http://${process.env.MINIO_ENDPOINT || MINIO_ENDPOINT}:9000/${key}`;
+    let aud_url = `http://${process.env.MINIO_ENDPOINT || MINIO_ENDPOINT}/${key}`;
     ffprobe(aud_url, async (err, metadata) => {
         if (err)
             console.log(err)
