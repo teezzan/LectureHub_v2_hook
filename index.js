@@ -31,14 +31,15 @@ app.post("/*", async (req, res) => {
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
 
 let send = async (payload) => {
-    const endpoint = 'https://islamvibes.herokuapp.com'
+    const endpoint = 'http://localhost:3000'
 
     const graphQLClient = new GraphQLClient(endpoint)
 
     const mutation = gql`
 
-    mutation Update($key: String!, $duration: Float!, $id: String! ){
+    mutation ($key: String!, $duration: Float!, $id: ID! ) {
         SudoUpdateLecture( key: $key, duration: $duration, id: $id )
+    }
         
   `
 
