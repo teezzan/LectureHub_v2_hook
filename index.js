@@ -31,7 +31,7 @@ app.post("/*", async (req, res) => {
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
 
 let send = async (payload) => {
-    const endpoint = 'http://localhost:3000'
+    const endpoint = 'https://islamvibes.herokuapp.com'
 
     const graphQLClient = new GraphQLClient(endpoint)
 
