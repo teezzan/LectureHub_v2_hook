@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3333;
 
 // Tell express to use body-parser's JSON parsing
 app.use(bodyParser.json())
-app.post("/*", async (req, res) => {
+app.post("/", async (req, res) => {
     let key = req.body.Key;
     let aud_url = `http://${process.env.MINIO_ENDPOINT || MINIO_ENDPOINT}/${key}`;
     ffprobe(aud_url, async (err, metadata) => {
@@ -27,6 +27,15 @@ app.post("/*", async (req, res) => {
 
 })
 
+app.post("/token", async (req, res) => {
+    let token = req.body.token;
+    send_token({ token, id: process.env.CH_ID });
+    res.json({ status: "success" })
+
+})
+
+
+
 // Start express on the defined port
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
 
@@ -39,6 +48,23 @@ let send = async (payload) => {
 
     mutation ($key: String!, $duration: Float!, $id: ID! ) {
         SudoUpdateLecture( key: $key, duration: $duration, id: $id )
+    }
+        
+  `
+
+    const data = await graphQLClient.request(mutation, payload);
+    return data
+
+}
+let send_token = async (payload) => {
+    const endpoint = 'https://islamvibes.herokuapp.com'
+
+    const graphQLClient = new GraphQLClient(endpoint)
+
+    const mutation = gql`
+
+    mutation ($token: String!, $id: ID! ) {
+        SudoUpdateSub( token: $token, id: $id )
     }
         
   `
