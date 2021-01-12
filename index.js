@@ -29,6 +29,7 @@ app.post("/", async (req, res) => {
 
 app.post("/token", async (req, res) => {
     let token = req.body.token;
+    console.log(req.body)
     send_token({ token, id: process.env.CH_ID });
     res.json({ status: "success" })
 
