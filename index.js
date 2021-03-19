@@ -41,7 +41,7 @@ app.post("/token", async (req, res) => {
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`))
 
 let send = async (payload) => {
-    const endpoint = 'https://islamvibes.herokuapp.com'
+    const endpoint = process.env.BEND_POINT || 'https://islamvibes.herokuapp.com';
 
     const graphQLClient = new GraphQLClient(endpoint)
 
@@ -58,7 +58,7 @@ let send = async (payload) => {
 
 }
 let send_token = async (payload) => {
-    const endpoint = 'https://islamvibes.herokuapp.com'
+    const endpoint = process.env.BEND_POINT || 'https://islamvibes.herokuapp.com';
 
     const graphQLClient = new GraphQLClient(endpoint)
 
