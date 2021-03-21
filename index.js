@@ -1,23 +1,22 @@
-// Require express and body-parser
 const express = require("express")
 const bodyParser = require("body-parser")
 const ffprobe = require('fluent-ffmpeg').ffprobe
-const MINIO_ENDPOINT = "localhost";
 let { GraphQLClient, gql } = require('graphql-request');
-// Initialize express and define a port
+
 const app = express()
 const PORT = process.env.PORT || 3333;
 
-// Tell express to use body-parser's JSON parsing
 app.use(bodyParser.json())
 app.post("/", async (req, res) => {
-    let key = req.body.Key;
-    let aud_url = `http://${process.env.MINIO_ENDPOINT || MINIO_ENDPOINT}/${key}`;
-    ffprobe(aud_url, async (err, metadata) => {
-        if (err)
+    let id = req.body.id;
+    let url = req.body.url;
+    ffprobe(url, async (err, metadata) => {
+        if (err) {
             console.log(err)
-        id = key.replace(".mp3", "");
-        let payload = { duration: metadata.format.duration, key, id: id.substr(key.indexOf("uploads/") + 8) };
+            return err
+        }
+
+        let payload = { duration: metadata.format.duration, id };
         let resp = await send(payload);
         console.log(resp);
         res.status(200).end()
@@ -27,13 +26,6 @@ app.post("/", async (req, res) => {
 
 })
 
-app.post("/token", async (req, res) => {
-    let token = req.body.token;
-    console.log(req.body)
-    send_token({ token, id: process.env.CH_ID });
-    res.json({ status: "success" })
-
-})
 
 
 
@@ -47,25 +39,8 @@ let send = async (payload) => {
 
     const mutation = gql`
 
-    mutation ($key: String!, $duration: Float!, $id: ID! ) {
-        SudoUpdateLecture( key: $key, duration: $duration, id: $id )
-    }
-        
-  `
-
-    const data = await graphQLClient.request(mutation, payload);
-    return data
-
-}
-let send_token = async (payload) => {
-    const endpoint = process.env.BEND_POINT || 'https://islamvibes.herokuapp.com';
-
-    const graphQLClient = new GraphQLClient(endpoint)
-
-    const mutation = gql`
-
-    mutation ($token: String!, $id: ID! ) {
-        SudoUpdateSub( token: $token, id: $id )
+    mutation ( $duration: Float!, $id: ID! ) {
+        SudoUpdateLecture( duration: $duration, id: $id )
     }
         
   `
