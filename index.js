@@ -11,7 +11,7 @@ app.post("/", async (req, res) => {
     let id = req.body.id;
     let url = req.body.url;
     console.log("before")
-    res.status(200);
+    // res.status(200);
     console.log("after")
     ffprobe(url, async (err, metadata) => {
         if (err) {
@@ -22,7 +22,7 @@ app.post("/", async (req, res) => {
         let payload = { duration: metadata.format.duration, id };
         let resp = await send(payload);
         console.log(resp);
-        // res.status(200).end()
+        res.status(200).end()
         return true
 
     });
