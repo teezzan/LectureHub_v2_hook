@@ -10,6 +10,7 @@ app.use(bodyParser.json())
 app.post("/", async (req, res) => {
     let id = req.body.id;
     let url = req.body.url;
+    res.status(200);
     ffprobe(url, async (err, metadata) => {
         if (err) {
             console.log(err)
@@ -19,7 +20,8 @@ app.post("/", async (req, res) => {
         let payload = { duration: metadata.format.duration, id };
         let resp = await send(payload);
         console.log(resp);
-        res.status(200).end()
+        // res.status(200).end()
+        return true
 
     });
 
