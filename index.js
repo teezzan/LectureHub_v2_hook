@@ -22,8 +22,8 @@ app.post("/", async (req, res) => {
         let payload = { duration: metadata.format.duration, id };
         let resp = await send(payload);
         console.log(resp);
-        res.status(200).end()
-        return true
+        return res.status(200).end()
+
 
     });
 
