@@ -8,8 +8,7 @@ const PORT = process.env.PORT || 3333;
 
 app.use(bodyParser.json())
 app.post("/", async (req, res) => {
-    let id = req.body.id;
-    let url = req.body.url;
+    let { id, url } = req.body;
     ffprobe(url, async (err, metadata) => {
         if (err) {
             console.log(err)
@@ -17,11 +16,8 @@ app.post("/", async (req, res) => {
         }
 
         let payload = { duration: metadata.format.duration, id };
-        let resp = await send(payload);
-        console.log(resp);
+        await send(payload);
         return res.status(200).end()
-
-
     });
 
 
