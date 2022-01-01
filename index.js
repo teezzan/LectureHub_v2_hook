@@ -10,9 +10,6 @@ app.use(bodyParser.json())
 app.post("/", async (req, res) => {
     let id = req.body.id;
     let url = req.body.url;
-    console.log("before")
-    // res.status(200);
-    console.log("after")
     ffprobe(url, async (err, metadata) => {
         if (err) {
             console.log(err)
